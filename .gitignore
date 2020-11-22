@@ -3,6 +3,17 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# manually added
+data
+Results_all_fgsm
+Results_baseline
+Results_fgsm_eps1_masked_bg
+Results_fgsm_eps1_masked_fg
+Pipfile
+Pipfile.lock
+images
+
+
 # C extensions
 *.so
 
