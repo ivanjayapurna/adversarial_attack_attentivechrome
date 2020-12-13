@@ -1,6 +1,6 @@
 import numpy
 import torch
-import scipy 
+import scipy
 import scipy.sparse as sp
 import logging
 from six.moves import xrange
@@ -21,9 +21,9 @@ def compute_aupr(all_targets,all_predictions):
             auPR = metrics.auc(recall,precision)#,reorder=True)
             if not math.isnan(auPR):
                 aupr_array.append(numpy.nan_to_num(auPR))
-        except: 
+        except:
             pass
-    
+
     aupr_array = numpy.array(aupr_array)
     mean_aupr = numpy.mean(aupr_array)
     median_aupr = numpy.median(aupr_array)
@@ -35,17 +35,17 @@ def compute_auc(all_targets,all_predictions):
     auc_array = []
 
     for i in range(all_targets.shape[1]):
-        try:  
+        try:
             auROC = metrics.roc_auc_score(all_targets[:,i], all_predictions[:,i])
             auc_array.append(auROC)
         except ValueError:
             pass
-    
+
     auc_array = numpy.array(auc_array)
     mean_auc = numpy.mean(auc_array)
     median_auc = numpy.median(auc_array)
     var_auc = numpy.var(auc_array)
-    return mean_auc,median_auc,var_auc,auc_array
+    return mean_auc,median_auc,var_auc, auc_array
 
 
 def compute_metrics(predictions, targets):
@@ -59,6 +59,3 @@ def compute_metrics(predictions, targets):
 
 
 	return mean_aupr,mean_auc
-
-
-

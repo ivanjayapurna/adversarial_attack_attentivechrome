@@ -58,6 +58,7 @@ parser.add_argument('--pgd_mask',type=str, default=None, help='pgd mask, fg or b
 parser.add_argument('--pgd_mask_threshold',type=int, default=1, help='pgd mask threshold')
 parser.add_argument('--save_adv_inputs', action='store_true', help='save generated adversarial inputs')
 parser.add_argument('--only_run_model', type=str, default=None, help='Run only a specific model instead of all 55')
+parser.add_argument('--test_on_train', type=str, default=None, help='Path to saved trained model weights to test on')
 args = parser.parse_args()
 
 
@@ -344,6 +345,8 @@ def main(args):
     else:
       if args.kipoi_model:
           model.load_state_dict(kipoi.get_model("AttentiveChrome/{}".format(args.cell_type)).model.state_dict())
+      elif args.test_on_train != None:
+          model.load_state_dict(torch.load(args.test_on_train+"/"+args.cell_type+'/'+model_name+'/'+model_name+'_avgAUC_model.pt'))
       else:
           model.load_state_dict(torch.load(model_dir+"/"+model_name+'_avgAUC_model.pt'))
 
