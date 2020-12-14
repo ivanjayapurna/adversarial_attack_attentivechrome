@@ -58,6 +58,7 @@ parser.add_argument('--pgd_mask',type=str, default=None, help='pgd mask, fg or b
 parser.add_argument('--pgd_mask_threshold',type=int, default=1, help='pgd mask threshold')
 parser.add_argument('--save_adv_inputs', action='store_true', help='save generated adversarial inputs')
 parser.add_argument('--only_run_model', type=str, default=None, help='Run only a specific model instead of all 55')
+parser.add_argument('--input_threshold',type=int, default=None, help='input threshold')
 parser.add_argument('--test_on_train', type=str, default=None, help='Path to saved trained model weights to test on')
 args = parser.parse_args()
 
@@ -142,10 +143,15 @@ def main(args):
         for i in range(iters) :
             inputs_1.requires_grad = True
 
-            if i == 0:
-                batch_predictions_orig, batch_beta_orig, batch_alpha_orig = model(inputs_1.type(dtype))
+            if args.input_threshold:
+              inputs = inputs_1 * (inputs_1 > args.input_threshold).to(torch.float32)
+            else:
+              inputs = inputs_1
 
-            batch_predictions,batch_beta,batch_alpha = model(inputs_1.type(dtype))
+            if i == 0:
+                batch_predictions_orig, batch_beta_orig, batch_alpha_orig = model(inputs.type(dtype))
+
+            batch_predictions,batch_beta,batch_alpha = model(inputs.type(dtype))
 
             if i < iters - 1 :
 
@@ -263,6 +269,8 @@ def main(args):
           per_epoch_corr += corr
 
         else:
+          if args.input_threshold:
+              inputs_1 = inputs_1 * (inputs_1 > args.input_threshold).to(torch.float32)
           batch_predictions,batch_beta,batch_alpha = model(inputs_1.type(dtype))
           batch_predictions_orig = batch_predictions
 

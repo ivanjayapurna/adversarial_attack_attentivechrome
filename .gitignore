@@ -9,12 +9,14 @@ trained_models
 Results_all_fgsm
 Results_all_adv_trained
 Results_all_threshold_trained
+Results_all_threshold_test_only
 Results_baseline
 Results_fgsm_eps1_masked_bg
 Results_fgsm_eps1_masked_fg
 Pipfile
 Pipfile.lock
 images
+figs4paper
 
 
 # C extensions
